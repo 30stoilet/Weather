@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 
 public class StarterActivity extends AppCompatActivity {
     private ActivityStarterBinding binding;
-    private String city = null;
+    private volatile String city = null;
     private boolean needToSave = false;
 
     public void setLocation(Location location) {
@@ -52,12 +52,16 @@ public class StarterActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(StarterActivity.this, MainActivity.class);
-                while (city == null) {}
-
-                intent.putExtra("needToSave", needToSave);
-                intent.putExtra("city", city);
-                startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (city == null) {}
+                        Intent intent = new Intent(StarterActivity.this, MainActivity.class);
+                        intent.putExtra("needToSave", needToSave);
+                        intent.putExtra("city", city);
+                        startActivity(intent);
+                    }
+                }).start();
             }
 
             @Override
@@ -65,7 +69,6 @@ public class StarterActivity extends AppCompatActivity {
 
             }
         });
-
 
         binding.TVtmp.startAnimation(animation);
     }
