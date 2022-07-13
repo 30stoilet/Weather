@@ -26,6 +26,7 @@
         android:fontFamily="@font/poppins_blod"
         android:text="Current Location"
         android:textSize="18sp"
+        android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TVLocalTimeDate" />
 
@@ -35,21 +36,87 @@
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/skyline"
+        android:src="@drawable/building"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/TVMainTemp"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="128dp"
+        android:layout_height="122dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="348dp"
         android:layout_marginRight="85dp"
-        app:layout_constraintHorizontal_bias="0.139"
+        android:fontFamily="@font/poppins_regular"
+        android:gravity="center"
+        android:text="88"
+        android:textColor="@color/black"
+        android:textSize="100sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.143"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TVCurrentLocation" />
+
+    <TextView
+        android:id="@+id/TVCelciumSign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="°C"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@id/TVMainTemp"
+        app:layout_constraintLeft_toRightOf="@id/TVMainTemp" />
+
+    <TextView
+        android:id="@+id/TVMaxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-thin"
+        android:text="↑32°C"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.67" />
+
+    <TextView
+        android:id="@+id/TVMinTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="15dp"
+        android:text="↓32°C"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-thin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TVMaxTemp"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <ImageView
+        android:layout_width="392dp"
+        android:layout_height="5dp"
+        android:layout_marginBottom="156dp"
+        android:adjustViewBounds="true"
+        android:background="@color/black"
+        android:maxWidth="20dp"
+        android:maxHeight="200dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/rect_def"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TVMainTemp"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
