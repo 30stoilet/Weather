@@ -36,24 +36,24 @@ public class GeoData {
 
     @SuppressLint("MissingPermission")
     public void getLastLocation() {
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        android.location.Location location = task.getResult();
-                        starterActivity.setLocation(location);
-                    }
-                });
-            } else {
-                Toast.makeText(starterActivity, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                starterActivity.startActivity(intent);
-            }
-        } else {
+        if (!checkPermissions()) {
             requestPermissions();
             while (!checkPermissions()){}
             getLastLocation();
+        } else if (!isLocationEnabled()) {
+            Toast.makeText(starterActivity, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            starterActivity.startActivity(intent);
+            while (!isLocationEnabled()) {}
+            getLastLocation();
+        } else {
+            fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    android.location.Location location = task.getResult();
+                    starterActivity.setLocation(location);
+                }
+            });
         }
     }
 
