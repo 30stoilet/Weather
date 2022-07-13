@@ -1,6 +1,6 @@
 package com.example.weather.repository.weather;
 
-import com.example.weather.MainActivity;
+import com.example.weather.view.MainActivity;
 import com.example.weather.repository.weather.data.ForecastWeather;
 
 import retrofit2.Call;

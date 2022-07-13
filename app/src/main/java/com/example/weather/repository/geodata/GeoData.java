@@ -14,9 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.example.weather.MainActivity;
-import com.example.weather.MainActivity;
 import com.example.weather.repository.weather.WeatherManager;
+import com.example.weather.view.StarterActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -28,11 +27,11 @@ import com.google.android.gms.tasks.Task;
 public class GeoData {
     private FusedLocationProviderClient fusedLocationClient;
     private static final int PERMISSION_ID = 44;
-    private final MainActivity mainActivity;
+    private final StarterActivity starterActivity;
 
-    public GeoData(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(mainActivity);
+    public GeoData(StarterActivity starterActivity) {
+        this.starterActivity = starterActivity;
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(starterActivity);
     }
 
     @SuppressLint("MissingPermission")
@@ -43,17 +42,13 @@ public class GeoData {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         android.location.Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-                            WeatherManager.setWeather(location.getLatitude() + "," + location.getLongitude(), mainActivity);
-                        }
+                        starterActivity.setLocation(location);
                     }
                 });
             } else {
-                Toast.makeText(mainActivity, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+                Toast.makeText(starterActivity, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mainActivity.startActivity(intent);
+                starterActivity.startActivity(intent);
             }
         } else {
             requestPermissions();
@@ -75,7 +70,7 @@ public class GeoData {
 
         // setting LocationRequest
         // on FusedLocationClient
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(mainActivity);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(starterActivity);
         fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
 
@@ -84,26 +79,26 @@ public class GeoData {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location location = locationResult.getLastLocation();
-            WeatherManager.setWeather(location.getLatitude() + "," + location.getLongitude(), mainActivity);
+            starterActivity.setLocation(location);
         }
     };
 
     private void requestPermissions() {
-        ActivityCompat.requestPermissions(mainActivity, new String[]{
+        ActivityCompat.requestPermissions(starterActivity, new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
 
     private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) starterActivity.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     private boolean checkPermissions() {
-        return ActivityCompat.checkSelfPermission(mainActivity,
+        return ActivityCompat.checkSelfPermission(starterActivity,
                 Manifest.permission.ACCESS_COARSE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                ActivityCompat.checkSelfPermission(starterActivity, Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED;
     }
 }
