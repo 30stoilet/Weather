@@ -1,20 +1,30 @@
 package com.example.weather.view;
 
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.weather.adapters.HM_RecyclerViewAdapter;
 import com.example.weather.databinding.ActivityMainBinding;
 import com.example.weather.repository.geodata.GeoData;
 import com.example.weather.repository.weather.WeatherManager;
 import com.example.weather.repository.weather.data.ForecastWeather;
+import com.example.weather.repository.weather.data.Hour;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setListeners() {
-        binding.ETcity.setOnKeyListener(new View.OnKeyListener() {
+        binding.TVCurrentLocation.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
-                    WeatherManager.setWeather(binding.ETcity.getText().toString(), MainActivity.this);
+                    WeatherManager.setWeather(binding.TVCurrentLocation.getText().toString(), MainActivity.this);
                     return true;
                 }
                 return false;
@@ -49,15 +59,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setCurrentWeather(ForecastWeather forecastWeather) {
-        binding.ETcity.setText(forecastWeather.getLocation().getName());
-        binding.TVtemperature.setText(String.format("%s", forecastWeather.getCurrent().getTemp_c()));
-        binding.TVLowestHighestTemperature.setText(String.format("↑%s°C ↓%s°C", forecastWeather.getForecast().getForecastday()[0].getDay().getMaxtemp_c(), forecastWeather.getForecast().getForecastday()[0].getDay().getMintemp_c()));
-        binding.TVstatus.setText(forecastWeather.getCurrent().getCondition().getText());
+        binding.TVCurrentLocation.setText(forecastWeather.getLocation().getName());
+        binding.TVMainTemp.setText(String.format("%s", (int)forecastWeather.getCurrent().getTemp_c()));
+        binding.TVMaxTemp.setText(String.format("↑%s°C", (int)forecastWeather.getForecast().getForecastday()[0].getDay().getMaxtemp_c()));
+        binding.TVMinTemp.setText(String.format("↓%s°C", (int)forecastWeather.getForecast().getForecastday()[0].getDay().getMintemp_c()));
+        binding.TVcondition.setText(forecastWeather.getCurrent().getCondition().getText());
+
+
+        List<Hour> hours = new LinkedList<>();
+
+        Collections.addAll(hours, forecastWeather.getForecast().getForecastday()[0].getHour());
+        HM_RecyclerViewAdapter adapter = new HM_RecyclerViewAdapter(hours, this);
+
+        binding.RVhours.setAdapter(adapter);
+        binding.RVhours.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
         if (this.getIntent().getBooleanExtra("needToSave", false)) {
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(openFileOutput("cities.txt", MODE_PRIVATE)));
-                bw.write(binding.ETcity.getText().toString());
+                bw.write(binding.TVCurrentLocation.getText().toString() + "\n");
+                bw.flush();
+                bw.close();
             } catch (Exception ignored) {}
         }
     }

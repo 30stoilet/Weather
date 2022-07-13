@@ -44,6 +44,11 @@ public class StarterActivity extends AppCompatActivity {
                     BufferedReader bf = new BufferedReader(new InputStreamReader(openFileInput("cities.txt")));
                     city = bf.readLine();
                     bf.close();
+                    if (city == "") {
+                        needToSave = true;
+                        new GeoData(StarterActivity.this).getLastLocation();
+                        city = null;
+                    }
                 } catch (Exception ex) {
                     needToSave = true;
                     new GeoData(StarterActivity.this).getLastLocation();

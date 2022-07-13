@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp">
+    <TextView
+        android:id="@+id/TV_listitem_temperature"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="28°C"
+        />
+
+    <ImageView
+        android:id="@+id/IV_listitem_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sun"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:maxHeight="45dp"
+        android:maxWidth="45dp"/>
+
+    <TextView
+        android:id="@+id/TV_listitem_time"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:text="12am"
+        android:gravity="center"/>
+
+
+</LinearLayout>
